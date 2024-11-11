@@ -7,12 +7,12 @@ A Python-based analysis of railway transaction data, focusing on popular travel 
 - [Project Objectives](https://github.com/abimbolamotinwo/Railway-Uk?tab=readme-ov-file#project-objectives)
 - [Expected Outcome](https://github.com/abimbolamotinwo/Railway-Uk?tab=readme-ov-file#expected-outcome)
 - [Document Purpose](https://github.com/abimbolamotinwo/Railway-Uk?tab=readme-ov-file#document-purpose)
-- [Use Case]()
-- Data Source
-- Data Cleaning and Processing
-- Data Analysis
-- Recommendation
-- Conclusion
+- [Use Case](https://github.com/abimbolamotinwo/Railway-Uk/blob/main/README.md#use-case)
+- [Data Source](https://github.com/abimbolamotinwo/Railway-Uk/blob/main/README.md#data-source)
+- [Data Cleaning and Processing](https://github.com/abimbolamotinwo/Railway-Uk/blob/main/README.md#data-cleaning-and-processing)
+- [Data Analysis](https://github.com/abimbolamotinwo/Railway-Uk/blob/main/README.md#data-analysis)
+- [Recommendation]()
+- [Conclusion]()
   
 ## Project Overview
 This project leverages Python to analyze UK National Rail ticket data from January to April 2024, focusing on key aspects such as travel routes, times, ticket types, and journey punctuality. The analysis aims to uncover actionable insights into passenger behavior, peak travel patterns, revenue distribution, and performance reliability. These insights are intended to enhance service efficiency and improve customer satisfaction.
