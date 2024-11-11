@@ -43,3 +43,82 @@ Through this use case, stakeholders from various departments can align their str
 
 - ## Data Source
 The dataset for this analysis was sourced from [Maven Analytics](https://mavenanalytics.io/data-playground?page=2&pageSize=5) website, an educational platform offering curated datasets for data professionals. Specifically, this dataset simulates UK National Rail transactions from January to April 2024, including information on journey dates, ticket classes, ticket types, station locations, times, prices, and journey statuses. The data offers a comprehensive snapshot of travel patterns, ticket preferences, and operational performance for this period.
+
+- ## Data Cleaning and Processing
+The dataset was initially well-constructed, with thorough checks confirming the absence of null values and duplicates. However, several transformations were needed to prepare the data for analysis:
+1.	Date and Time Columns: The date and time columns—"Date of Purchase”, “Time of Purchase”, “Date of Journey”, “Departure Time”, “Arrival Time”, and “Actual Arrival Time”—were initially stored as object data types. To enable accurate date and time calculations, these columns were converted to the datetime64 data type. 
+ The columns were converted from object datatype to datetime64 with this Python code:
+
+```Python
+railway['Date of Purchase'] = pd.to_datetime(railway['Date of Purchase'])
+railway['Date of Journey'] = pd.to_datetime(railway['Date of Journey'])
+railway['Time of Purchase'] = pd.to_datetime(railway['Time of Purchase'], format='%H:%M:%S')
+railway['Departure Time'] = pd.to_datetime(railway['Departure Time'], format='%H:%M:%S')
+railway['Arrival Time'] = pd.to_datetime(railway['Arrival Time'], format='%H:%M:%S')
+railway['Actual Arrival Time'] = pd.to_datetime(railway['Actual Arrival Time'], format='%H:%M:%S')
+```
+
+2. Text Standardization: The “Reason for Delay” column contained text in inconsistent cases (uppercase, lowercase, mixed). This was standardized to proper case (capitalizing the first letter of each word) using a proper case function, ensuring consistency in the data. Here’s the Python code:
+
+```Python
+railway['Reason for Delay']=railway['Reason for Delay'].str.title()
+```
+
+3.	New Columns: Two additional columns were created to support time-based analysis:
+- Hour of Departure: Extracted the hour from the “Departure Time” column to identify peak travel hours.
+- Day of the Week: Derived the day of the week from the “Date of Journey” column to analyze travel patterns by weekday.
+Here’s the Python code from creating column “Hour” and “Weekdays”:
+
+ ```Python
+railway['Reason for Delay']=railway['Reason for Delay'].str.title()
+```
+
+These cleaning steps ensured that the data was properly formatted, enriched with new columns, and allows for more efficient handling of temporal data enabling more detailed and accurate analysis of travel patterns and delays.
+
+- ## Data Analysis
+The aim of this analysis is to comprehensively examine UK National Rail ticketing and journey data to uncover patterns, optimize operations, and improve overall service quality and profitability. By analyzing travel demand, revenue trends, and punctuality metrics, this study seeks to understand core travel behaviors, identify high-demand routes, and assess the effectiveness of various ticket types and classes.
+
+A primary goal is to enhance the efficiency of National Rail services by identifying when and where peak demand occurs, allowing the organization to adjust service schedules and capacity. Furthermore, analyzing revenue across ticket types and classes offers insights into customer preferences and potential areas for pricing or marketing adjustments, helping maximize revenue while maintaining a competitive service offering.
+
+On-time performance is another essential component, as it directly influences customer satisfaction and operational reputation. By examining punctuality and delay patterns, we can pinpoint recurring issues and contributing factors, enabling targeted improvements that ensure better service reliability.
+
+This analysis ultimately provides National Rail with data-driven insights that can inform strategic planning, from operational adjustments to targeted marketing campaigns, ensuring a better experience for passengers and a more optimized revenue model for the organization. Through systematic exploration of travel trends, revenue generation, and service performance, this study aims to support National Rail in delivering a reliable, efficient, and financially sustainable rail service.
+To provide insights into this analysis, the following questions will be addressed:
+
+1. #### What are the most popular routes?
+The purpose of this analysis is to understand the most frequently traveled routes as it helps in resource allocation, such as adjusting the frequency of trains or adding capacity on high-demand routes. It also allows identification of key travel corridors, which can inform strategic decisions around infrastructure investments or targeted marketing campaigns to increase ticket sales on less popular routes.
+To achieve this, columns required is “Departure station”, “Arrival Destination”, and frequency count- this counts occurrence of each unique pair to determine the frequency of each route.
+Firstly, start by grouping the data based on the “Departure Station” and “Arrival Destination” columns and count occurrences (Frequency), it was stored with a variable name ‘routecounts’. 
+ Here’s the Python code:
+
+```Python
+routecounts=railway.groupby(['Departure Station', 'Arrival Destination']).size().reset_index(name=’Frequency’)
+```
+Afterwards, sort the routes by Frequency in descending order for easier analysis, then select top 10 by Frequency, it was stored with a variable name ‘top_routes’. The result was visualized using a bar chart, here’s the Python code:
+
+```Python
+top_routes=routecounts.sort_values(‘Frequency', ascending=False).head(10)
+# Visualize with a bar chart
+
+plt.figure(figsize=(10, 6))
+sns.barplot(x='Frequency', y=top_routes['Departure Station'] + " - " + top_routes['Arrival Destination'], data=top_routes, palette="viridis")
+plt.xlabel('Frequency')
+plt.ylabel('Route (Departure - Arrival)')
+plt.title('Top 10 Most Popular Routes')
+plt.xticks(rotation=45)
+plt.show()
+
+```
+
+The above analysis shows that the top 10 popular routes are:
+- Manchester Piccadilly to Liverpool Lime Street with frequency counts of 4628
+- London Euston to Birmingham New Street with frequency counts of 4209
+- London Kings Cross to York with frequency counts of 3922
+- London Paddington to Reading with frequency counts of 3873
+- London St Pancras to Birmingham New Street with frequency counts of 3471
+- Liverpool Lime Street	 to Manchester Piccadilly with frequency counts of 3002
+- Liverpool Lime Street to London Euston with frequency counts of 1097
+- London Euston to Manchester Piccadilly with frequency counts of	712
+- Birmingham New Street to London St Pancras with frequency counts of 702
+- London Paddington to Oxford with frequency counts of 485
+
