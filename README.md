@@ -98,8 +98,8 @@ Afterwards, sort the routes by Frequency in descending order for easier analysis
 
 ```Python
 top_routes=routecounts.sort_values(‘Frequency', ascending=False).head(10)
-# Visualize with a bar chart
 
+# Visualize with a bar chart
 plt.figure(figsize=(10, 6))
 sns.barplot(x='Frequency', y=top_routes['Departure Station'] + " - " + top_routes['Arrival Destination'], data=top_routes, palette="viridis")
 plt.xlabel('Frequency')
@@ -109,6 +109,7 @@ plt.xticks(rotation=45)
 plt.show()
 
 ```
+![](https://github.com/abimbolamotinwo/Railway-Uk/blob/main/Top10%20popular%20route.png)
 
 The above analysis shows that the top 10 popular routes are:
 - Manchester Piccadilly to Liverpool Lime Street with frequency counts of 4628
@@ -121,4 +122,52 @@ The above analysis shows that the top 10 popular routes are:
 - London Euston to Manchester Piccadilly with frequency counts of	712
 - Birmingham New Street to London St Pancras with frequency counts of 702
 - London Paddington to Oxford with frequency counts of 485
+
+2. #### What are the Peak Travel Times?
+The aim of this analysis is to identify peak travel times as it helps in planning and optimizing service schedules, which can enhance passenger experience by reducing overcrowding during high-demand hours. Insights into daily and weekly travel patterns also allow for better workforce management and help in aligning services with customer needs, potentially improving operational efficiency.
+Columns Required: Departure Time and Date of Journey columns
+Approach:
+ Firstly, extract hour from “Departure Time” column, group by hour and count occurrences using value_counts(), then select top 5. The result was stored with a variable name ‘peak_travel_hours’ and visualized with a bar chart. Here’s the Python code:
+
+ ```Python
+peak_travel_hours=railway['Hours'].value_counts().head()
+
+# Visualize using bar chart
+plt.figure(figsize=(10, 6))
+peak_travel_hours.plot(kind='bar', color='skyblue')
+plt.title('Top 5 Peak Travel Hours')
+plt.xlabel('Hour of Departure')
+plt.ylabel('Number of Departures')
+plt.show()
+```
+![](https://github.com/abimbolamotinwo/Railway-Uk/blob/main/Peak%20Travel%20hour.png)
+
+Afterwards, extract weekdays from “Date of Journey” column, group by weekdays and count occurrences using value_counts(), then select top 5. The result was stored with a variable name ‘peak_travel_days’ and visualized with a bar chart. Here’s the Python code:
+
+```Python
+peak_travel_days=railway['Weekdays'].value_counts().head()
+
+#Visualize using bar chart
+plt.figure(figsize=(10, 6))
+peak_travel_days.plot(kind='bar', color='salmon')
+plt.title('Top 5 Peak Travel Days')
+plt.xlabel('Day of the Week')
+plt.ylabel('Number of Journeys')
+plt.show()
+```
+![](https://github.com/abimbolamotinwo/Railway-Uk/blob/main/Peak%20Travel%20days.png)
+
+The Peak travel hour analysis shows that:
+-	18:00 (6 PM) has the highest number of departures, with 3,113 trips, suggesting this is a peak time for travel, likely due to workers leaving their jobs at the end of the typical workday.
+-	06:00 (6 AM) follows closely with 3,112 trips, suggesting this time is popular among early commuters heading to work.
+-	17:00 (5 PM) is another busy hour, with 2,888 departures, aligning with people finishing work or heading to evening activities.
+-	07:00 (7 AM) sees 2,795 departures, supporting the start times for work and school, as commuters aim to arrive by 8 or 9 AM.
+-	16:00 (4 PM) has 2,301 trips, which may reflect travel by students finishing school or individuals with earlier work schedules.
+
+The Peak travel weekday analysis shows that:
+- Wednesday (4,692 trips) has the highest number of journeys, possibly due to regular midweek commuting for work or business.
+- Tuesday (4,607 trips) is also a popular travel day, likely driven by business travel schedules. Many professionals prefer traveling on Tuesday to avoid the busier start-of-week traffic on Monday.
+- Thursday (4,580 trips) and Sunday (4,580 trips) show similar travel volumes. Thursday may be popular for people traveling to wrap up their business week, while Sunday likely sees an increase due to leisure travel and people returning from weekend activities.
+- Monday (4,436 trips) has a slightly lower count, likely influenced by commuters heading to work and people traveling back from weekend trips.
+
 
